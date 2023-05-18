@@ -62,7 +62,7 @@ const BasketScreen = () => {
             <Text className="text-center text-lg">{restaurant.title}</Text>
           </View>
         </View>
-        <View className="flex-row items-center space-x-4 bg-white p-4 mb-5  mt-2 border-t-[0.5px] border-[#bcff52] shadow-sm shadow-gray-300">
+        <View className="flex-row items-center space-x-4 bg-white p-4 my-2 border-y-[0.5px] border-[#bcff52] shadow-sm shadow-gray-300">
           <Image
             source={{
               uri: "https://img.freepik.com/free-vector/delivery-service-with-masks-concept_23-2148498595.jpg?w=740&t=st=1683218675~exp=1683219275~hmac=478be6064a9850ceef1090b2309c079c1747c28bbc558ddb6ed1d3687561af6b",
@@ -76,8 +76,9 @@ const BasketScreen = () => {
             </Text>
           </TouchableOpacity>
         </View>
-        <Text className=" px-3 text-lg font-bold mb-4">Your Items</Text>
-        <ScrollView className="bg-white py-4">
+
+        <ScrollView className="bg-white py-4 border-t-[0.5px] border-[#bcff52] ">
+          <Text className=" px-5 text-lg font-bold mb-4">Your Items</Text>
           {Object.entries(groupedItems).map(([key, items]) => (
             <View key={key} className="px-3 py-1">
               <View className=" flex-row items-center space-x-2 px-2 ">
@@ -131,10 +132,10 @@ const BasketScreen = () => {
           ))}
 
           <View>
-            <Text className=" text-[20px] font-bold px-4 font py-2 my-3">
+            <Text className=" text-lg font-bold px-6 font py-2 my-3">
               Summary
             </Text>
-            <TouchableOpacity className="flex-row items-center px-2 pl-5 py-4 bg-white">
+            <TouchableOpacity className="flex-row space-x-2 items-center px-2 pl-5 py-4 bg-white">
               <Ionicons name="pricetag-outline" size={24} color="black" />
               <Text className="px-2 flex-1 text-[16px] font-medium">
                 Add a Promo Code
@@ -192,7 +193,10 @@ const BasketScreen = () => {
                 />
               </Text>
             </View>
-            <TouchableOpacity className="rounded-lg mx-4 bg-[#bcff52] p-4 ">
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Preparing")}
+              className="rounded-lg mx-4 bg-[#bcff52] p-4 "
+            >
               <Text className="text-center text-[#2c4700] font-bold text-[18px]">
                 Place Order
               </Text>
