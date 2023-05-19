@@ -12,6 +12,8 @@ const initialState = {
     shortDesc: null,
     dishes: null,
     imgUrl: null,
+    lat: null,
+    long: null,
   },
 };
 

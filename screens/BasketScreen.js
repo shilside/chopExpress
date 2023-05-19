@@ -7,7 +7,7 @@ import {
   ScrollView,
   StyleSheet,
 } from "react-native";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { selectrestaurant } from "../slices/restaurantSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
@@ -23,6 +23,7 @@ import { urlFor } from "../sanity";
 import Currency from "react-currency-formatter";
 import { Octicons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
+import * as Animatable from "react-native-animatable";
 
 const BasketScreen = () => {
   const navigation = useNavigation();
@@ -31,6 +32,8 @@ const BasketScreen = () => {
   const [groupedItems, setGroupedItems] = useState([]);
   const dispatch = useDispatch();
   const basketTotal = useSelector(selectBasketTotal);
+
+  const prevItemCountRef = useRef(items.length);
 
   useEffect(() => {
     const groupedItems = items.reduce((results, item) => {
@@ -42,8 +45,16 @@ const BasketScreen = () => {
       navigation.goBack();
     }
 
+    if (prevItemCountRef.current !== items.length) {
+      animRef.current?.bounceIn();
+    }
+
+    prevItemCountRef.current = items.length;
+
     setGroupedItems(groupedItems);
   }, [items]);
+
+  const animRef = useRef(null);
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -51,9 +62,9 @@ const BasketScreen = () => {
         <View className="p-5 border-b-[0.7px] border-[#bcff52] bg-white shadow-sm shadow-gray-300">
           <TouchableOpacity
             onPress={navigation.goBack}
-            className="absolute top-3 left-3 bg-white shadow-sm shadow-gray-400 w-7 h-7 justify-center items-center rounded-full"
+            className="absolute top-6 left-6 bg-white shadow-sm shadow-gray-400 w-9 h-9 justify-center items-center rounded-full"
           >
-            <Feather name="x" size={20} color="black" />
+            <Feather name="x" size={24} color="black" />
           </TouchableOpacity>
           <View>
             <Text className=" text-gray-400 font-bold text-center">
@@ -77,7 +88,7 @@ const BasketScreen = () => {
           </TouchableOpacity>
         </View>
 
-        <ScrollView className="bg-white py-4 border-t-[0.5px] border-[#bcff52] ">
+        <ScrollView className="bg-white  pt-4 border-t-[0.5px] border-[#bcff52] ">
           <Text className=" px-5 text-lg font-bold mb-4">Your Items</Text>
           {Object.entries(groupedItems).map(([key, items]) => (
             <View key={key} className="px-3 py-1">
@@ -103,7 +114,13 @@ const BasketScreen = () => {
                   >
                     <Octicons name="trash" size={16} color="black" />
                   </TouchableOpacity>
-                  <Text className="font-semibold">{items.length}</Text>
+                  <Animatable.Text
+                    ref={animRef}
+                    iterationCount={1}
+                    className="font-semibold"
+                  >
+                    {items.length}
+                  </Animatable.Text>
                   <TouchableOpacity
                     onPress={() => {
                       dispatch(
@@ -131,7 +148,7 @@ const BasketScreen = () => {
             </View>
           ))}
 
-          <View>
+          <View className="pb-10">
             <Text className=" text-lg font-bold px-6 font py-2 my-3">
               Summary
             </Text>
